@@ -1,0 +1,100 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-ink: #0b1220;
+  --color-panel: #131c2e;
+  --color-panel-2: #1b2740;
+  --color-line: #2a3856;
+  --color-muted: #94a3b8;
+  --color-text: #eef2f8;
+  --color-accent: #ff5a36;
+  --color-accent-2: #ffb020;
+  --color-teal: #14b8a6;
+  --color-good: #22c55e;
+  --color-bad: #ef4444;
+
+  --font-sans: 'Inter', 'PingFang TC', 'Noto Sans TC', 'Microsoft JhengHei', system-ui, sans-serif;
+
+  --animate-pop: pop 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.3);
+  --animate-fade-up: fade-up 0.4s ease-out both;
+
+  @keyframes pop {
+    from { transform: scale(0.6); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+  @keyframes fade-up {
+    from { transform: translateY(12px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+}
+
+:root {
+  color-scheme: dark;
+  --sat: env(safe-area-inset-top, 0px);
+  --sab: env(safe-area-inset-bottom, 0px);
+  --sal: env(safe-area-inset-left, 0px);
+  --sar: env(safe-area-inset-right, 0px);
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-ink);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior: none;
+}
+
+/* Full-viewport game screens: no page scroll, no rubber-banding, no double-tap zoom. */
+.game-screen {
+  position: fixed;
+  inset: 0;
+  height: 100dvh;
+  overflow: hidden;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.safe-top { padding-top: max(var(--sat), 0.75rem); }
+.safe-bottom { padding-bottom: max(var(--sab), 0.75rem); }
+.safe-x { padding-left: max(var(--sal), 1rem); padding-right: max(var(--sar), 1rem); }
+
+/* Custom utilities (Tailwind v4 only allows @apply of utilities, not component classes). */
+@utility btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 font-bold transition active:scale-[0.97] disabled:opacity-40 disabled:active:scale-100;
+}
+@utility btn-primary {
+  @apply btn bg-accent text-white shadow-lg shadow-accent/25 hover:brightness-110;
+}
+@utility btn-secondary {
+  @apply btn bg-panel-2 text-text ring-1 ring-line hover:bg-line;
+}
+@utility btn-ghost {
+  @apply btn bg-transparent text-muted hover:text-text;
+}
+@utility card {
+  @apply rounded-2xl bg-panel ring-1 ring-line;
+}
+@utility chip {
+  @apply rounded-full px-3 py-1 text-sm ring-1 ring-line;
+}
+@utility icon-btn {
+  @apply grid size-11 place-items-center rounded-full bg-ink/70 text-text shadow-lg ring-1 ring-white/10 backdrop-blur transition hover:bg-ink active:scale-95;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

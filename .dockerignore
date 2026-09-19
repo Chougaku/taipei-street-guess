@@ -1,0 +1,13 @@
+node_modules
+**/node_modules
+**/dist
+.git
+.env
+.env.*
+!.env.example
+*.log
+apps/server/.pglite
+apps/web/android
+tools/location-gen/cache
+Google Maps API.txt
+.claude

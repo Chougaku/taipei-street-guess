@@ -1,0 +1,17 @@
+{
+  "name": "@tg/shared",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./villages": "./src/villages.ts",
+    "./data/*": "./src/data/*"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "devDependencies": {
+    "@types/geojson": "^7946.0.16"
+  }
+}

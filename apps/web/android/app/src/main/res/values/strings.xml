@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">台北街景猜猜</string>
+    <string name="title_activity_main">台北街景猜猜</string>
+    <string name="package_name">tw.taipeiguessr.app</string>
+    <string name="custom_url_scheme">tw.taipeiguessr.app</string>
+</resources>

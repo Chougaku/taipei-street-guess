@@ -1,0 +1,22 @@
+node_modules/
+dist/
+dist-ssr/
+coverage/
+*.log
+.DS_Store
+.env
+.env.*
+!.env.example
+!.env.native.example
+*.local
+.pglite/
+tools/location-gen/cache/
+# Secrets that were delivered as plain text
+Google Maps API.txt
+# Android build output
+apps/web/android/app/build/
+apps/web/android/.gradle/
+apps/web/android/local.properties
+*.keystore
+*.jks
+apps/web/android/keystore.properties

@@ -1,0 +1,11 @@
+{
+  "name": "@tg/location-gen",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "gen": "tsx --env-file=../../.env src/generate.ts"
+  },
+  "dependencies": {
+    "@tg/shared": "*"
+  }
+}

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="112" fill="#0b1220"/>
+  <path d="M256 72c-79.5 0-144 62.7-144 140 0 99.6 124.6 214.8 136.8 225.6a10.8 10.8 0 0 0 14.4 0C275.4 426.8 400 311.6 400 212c0-77.3-64.5-140-144-140z" fill="#ff5a36"/>
+  <circle cx="256" cy="212" r="78" fill="#fff4e6"/>
+  <!-- Taipei 101 silhouette -->
+  <path d="M256 150l6 14h-4v10l10 6v12l8 4v12l8 4v12l6 3v33h-68v-33l6-3v-12l8-4v-12l8-4v-12l10-6v-10h-4z" fill="#0b1220"/>
+</svg>

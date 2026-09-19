@@ -1,0 +1,28 @@
+{
+  "name": "@tg/server",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch --env-file-if-exists=../../.env src/index.ts",
+    "start": "node --env-file-if-exists=../../.env dist/index.mjs",
+    "build": "esbuild src/index.ts --bundle --platform=node --format=esm --target=node22 --outfile=dist/index.mjs --external:@electric-sql/pglite --external:bufferutil --external:utf-8-validate --loader:.json=json --banner:js=\"import { createRequire as __cr } from 'node:module'; const require = __cr(import.meta.url);\"",
+    "seed": "tsx --env-file-if-exists=../../.env src/cli/seed.ts",
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@electric-sql/pglite": "^0.5.8",
+    "@fastify/cors": "^11.3.0",
+    "@fastify/static": "^10.1.4",
+    "@tg/shared": "*",
+    "fastify": "^5.12.5",
+    "jose": "^6.2.12",
+    "postgres": "^3.4.9",
+    "socket.io": "^4.8.3",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2",
+    "socket.io-client": "^4.8.3"
+  }
+}

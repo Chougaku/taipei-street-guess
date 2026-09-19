@@ -1,0 +1,37 @@
+# Fly.io deployment (https://fly.io). Change `app` to your own app name.
+#   fly launch --no-deploy --copy-config
+#   fly secrets set SUPABASE_URL=... DATABASE_URL=... GOOGLE_MAPS_SERVER_KEY=... CORS_ORIGINS=https://your-domain
+#   fly deploy --build-arg VITE_GOOGLE_MAPS_API_KEY=... --build-arg VITE_GOOGLE_MAP_ID=... \
+#              --build-arg VITE_SUPABASE_URL=... --build-arg VITE_SUPABASE_ANON_KEY=...
+app = "taipei-guessr"
+primary_region = "nrt" # Tokyo — closest Fly region to Taipei
+
+[build]
+
+[env]
+  NODE_ENV = "production"
+  PORT = "8080"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  # Realtime matches live in memory, so keep exactly one machine running.
+  auto_stop_machines = "off"
+  auto_start_machines = true
+  min_machines_running = 1
+
+  [http_service.concurrency]
+    type = "connections"
+    soft_limit = 800
+    hard_limit = 1000
+
+[[http_service.checks]]
+  grace_period = "20s"
+  interval = "30s"
+  method = "GET"
+  path = "/api/health"
+  timeout = "5s"
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "512mb"
