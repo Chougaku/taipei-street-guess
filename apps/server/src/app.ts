@@ -97,7 +97,8 @@ export async function buildApp(deps: AppDeps, opts: { logger?: boolean } = {}): 
 
   const webDist = deps.cfg.webDistDir;
   if (webDist && existsSync(webDist)) {
-    await app.register(fastifyStatic, { root: webDist, wildcard: false });
+    // wildcard: true resolves files per request, so a rebuilt dist is picked up without a restart.
+    await app.register(fastifyStatic, { root: webDist, wildcard: true });
     // SPA fallback: unknown non-API GET routes serve index.html.
     app.setNotFoundHandler((req, reply) => {
       if (req.method === 'GET' && !req.url.startsWith('/api/')) return reply.sendFile('index.html');
