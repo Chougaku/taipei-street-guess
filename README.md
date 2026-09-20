@@ -1,6 +1,22 @@
 # 台北街景猜猜 TaipeiGuessr
 
-臺北市版的街景猜謎遊戲。看 Google 街景，在地圖上猜出你在臺北的哪裡，功能對標 GeoGuessr。支援 Web、Android App，以及 iOS（Safari / PWA）。
+臺北市版的街景猜謎遊戲。看 Google 街景，在地圖上猜出你在臺北的哪裡，功能對標 GeoGuessr。主要在 Chrome 等桌面瀏覽器遊玩，手機瀏覽器也能玩（另外附有 Android App 和 iOS PWA，非必要）。
+
+## 在 Chrome 上開始玩
+
+```bash
+npm install
+npm run play
+```
+
+這個指令會建置前端、啟動伺服器，並自動用 Chrome 開啟 <http://localhost:8787>。按 `Ctrl+C` 停止。
+
+- 第一次執行大約需要 10 秒建置，之後可以用 `npm run play -- --skip-build` 直接啟動。
+- `npm start` 則是只啟動、不自動開瀏覽器。
+- 遊戲資料存在 `apps/server/.pglite`，重開也會保留。
+- 需要 `.env` 裡的 `VITE_GOOGLE_MAPS_API_KEY`（街景和地圖都靠它）。
+
+**讓同一個 Wi-Fi 的朋友一起玩**：伺服器監聽區域網路，其他人用 `http://<你的內網 IP>:8787` 就能連進來，也能一起開派對房間對戰。如果之後替金鑰設了網址限制，記得把這個來源也加進允許清單。要讓網路上的任何人都能玩，就需要部署到主機（見下方「部署」）。
 
 ## 功能
 
@@ -37,7 +53,7 @@ tools/location-gen/  用 Street View Metadata API（免費）產生出題地點�
 - 伺服器在玩家猜完之前只給 pano ID，不給答案座標。
 - 資料表都啟用 RLS 且沒有任何 policy，所以瀏覽器沒辦法直接讀取答案或竄改分數。
 
-## 本機開發（不需要 Supabase）
+## 開發模式（前端熱更新，不需要 Supabase）
 
 ```bash
 npm install
@@ -139,7 +155,9 @@ fly deploy --build-arg VITE_GOOGLE_MAPS_API_KEY=... --build-arg VITE_GOOGLE_MAP_
 
 > 即時對戰的狀態存在記憶體，所以目前只跑**一台**機器（`fly.toml` 已設定）。之後要擴充，可以加上 Socket.IO Redis adapter，並讓同一場對戰固定連到同一台機器（sticky session）。
 
-## Android App
+## Android App（選用）
+
+> 只在 Chrome／瀏覽器遊玩的話，這一段可以完全略過。
 
 ```bash
 cd apps/web
@@ -165,9 +183,9 @@ Deep link：
 - `taipeiguessr://c/<挑戰代碼>`、`taipeiguessr://party/<房間代碼>`
 - OAuth 回呼：`taipeiguessr://auth-callback`
 
-## iOS
+## iOS（選用）
 
-目前不上架 App Store，iOS 使用者用 Safari 開啟網站，再從「分享 → 加入主畫面」以 PWA 全螢幕遊玩。
+目前不上架 App Store，iOS 使用者用 Safari 開啟網站，再從「分享 → 加入主畫面」以 PWA 全螢幕遊玩。Android 的 Chrome 也可以用「安裝應用程式」把網頁裝成 App。
 
 程式碼已經是 Capacitor 架構，之後有 Mac 時執行 `npx cap add ios` 就能產生 iOS App（Google 登入需要另外設定 URL scheme）。
 

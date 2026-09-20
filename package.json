@@ -8,6 +8,8 @@
     "tools/*"
   ],
   "scripts": {
+    "play": "node scripts/play.mjs",
+    "start": "node scripts/play.mjs --no-open",
     "dev": "npm run dev --workspace @tg/server & npm run dev --workspace @tg/web",
     "dev:web": "npm run dev --workspace @tg/web",
     "dev:server": "npm run dev --workspace @tg/server",
