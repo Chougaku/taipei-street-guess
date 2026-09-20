@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+      # The browser key is inlined at build time; CI only needs a placeholder to compile.
+      - run: npm run build
+        env:
+          VITE_GOOGLE_MAPS_API_KEY: ci-placeholder
+          VITE_GOOGLE_MAP_ID: DEMO_MAP_ID
+
+  # End-to-end tests need a real Maps JavaScript API key (the guess map is not mocked),
+  # so they only run when the repository has one configured.
+  e2e:
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'push' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - id: key
+        run: echo "present=${{ secrets.VITE_GOOGLE_MAPS_API_KEY != '' }}" >> "$GITHUB_OUTPUT"
+      - if: steps.key.outputs.present == 'true'
+        run: npx playwright install --with-deps chromium
+      - if: steps.key.outputs.present == 'true'
+        run: npm run test:e2e
+        env:
+          CI: 'true'
+          VITE_GOOGLE_MAPS_API_KEY: ${{ secrets.VITE_GOOGLE_MAPS_API_KEY }}
+          VITE_GOOGLE_MAP_ID: ${{ secrets.VITE_GOOGLE_MAP_ID }}
+      - if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: test-results
+          retention-days: 7

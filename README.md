@@ -51,14 +51,19 @@ npm run dev:web      # http://localhost:5173
 ## 測試
 
 ```bash
-npm test             # 共用套件與伺服器的所有測試
+npm test             # 共用套件與伺服器的所有測試（62 項）
 npm run typecheck
+npm run test:e2e     # Playwright 端對端測試（桌面 + 手機，12 項）
 ```
 
 伺服器測試用 in-memory PGlite 跑完整流程，涵蓋：
 - 經典模式、挑戰、每日挑戰、連勝、好友
 - 地圖編輯器、回報
 - Socket.IO 對戰：Duels、排位、大逃殺
+
+端對端測試會自己啟動一組獨立的伺服器（連接埠 8788 / 5174、獨立資料庫），並把街景換成假畫面，所以不會產生街景載入費用。猜測地圖仍使用真的 Google 地圖，因此需要 `VITE_GOOGLE_MAPS_API_KEY`。
+
+`.github/workflows/ci.yml` 會在 push 時跑型別檢查、單元測試和建置；只有在 repository secrets 設定了 `VITE_GOOGLE_MAPS_API_KEY` 時才會跑端對端測試。
 
 ## 環境變數（`.env`，放在專案根目錄）
 

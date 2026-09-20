@@ -4,7 +4,7 @@ import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
 
-const ROOT = resolve(__dirname, '../..');
+const ROOT = resolve(import.meta.dirname, '../..');
 
 export default defineConfig(({ mode }) => ({
   envDir: ROOT,
@@ -46,8 +46,8 @@ export default defineConfig(({ mode }) => ({
     host: true,
     port: 5173,
     proxy: {
-      '/api': 'http://localhost:8787',
-      '/socket.io': { target: 'http://localhost:8787', ws: true },
+      '/api': process.env.API_PROXY_TARGET ?? 'http://localhost:8787',
+      '/socket.io': { target: process.env.API_PROXY_TARGET ?? 'http://localhost:8787', ws: true },
     },
   },
   build: {

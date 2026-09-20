@@ -15,7 +15,9 @@
     "test": "vitest run",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "geo:build": "npm run build --workspace @tg/geo-build",
-    "locations:gen": "npm run gen --workspace @tg/location-gen"
+    "locations:gen": "npm run gen --workspace @tg/location-gen",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui"
   },
   "engines": {
     "node": ">=22"
@@ -24,6 +26,7 @@
     "esbuild@0.28.2": true
   },
   "devDependencies": {
+    "@playwright/test": "^1.63.0",
     "@types/node": "^26.6.2",
     "tsx": "^4.23.13",
     "typescript": "^7.0.2",

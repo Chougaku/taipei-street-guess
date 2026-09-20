@@ -79,17 +79,17 @@ export function PlayScreen(props: PlayScreenProps) {
   const motionControl = useSettings((s) => s.motionControl);
   const sv = useRef<StreetViewHandle>(null);
   const compass = useRef<HTMLDivElement>(null);
-  const [loaded, setLoaded] = useState(false);
+  // Tracked by pano id rather than a boolean: StreetView can report "ready" before this
+  // component's own effects run, which would otherwise leave the loading overlay stuck.
+  const [loadedPano, setLoadedPano] = useState<string | null>(null);
+  const loaded = loadedPano === pano.panoId;
   const [sheetOpen, setSheetOpen] = useState(false);
   const [dockSize, setDockSize] = useState<DockSize>(1);
   const [dockPinned, setDockPinned] = useState(false);
   const [hover, setHover] = useState(false);
 
   useEffect(() => keepScreenAwake(), []);
-  useEffect(() => {
-    setLoaded(false);
-    setSheetOpen(false);
-  }, [pano.panoId]);
+  useEffect(() => setSheetOpen(false), [pano.panoId]);
 
   const inResult = phase === 'result';
   const pinRef = useRef(pin);
@@ -135,7 +135,7 @@ export function PlayScreen(props: PlayScreenProps) {
         movement={movement}
         motionControl={motionControl}
         compassRef={compass}
-        onReady={() => setLoaded(true)}
+        onReady={() => setLoadedPano(pano.panoId)}
         onFailed={() => onPanoFailed?.()}
       />
 
