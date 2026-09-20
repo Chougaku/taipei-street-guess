@@ -15,6 +15,7 @@ import { PlayScreen } from '../game/PlayScreen.tsx';
 import { RegionLayer, type RegionStyle } from '../game/RegionLayer.tsx';
 import { loadVillages, useRegions } from '../game/regions.ts';
 import { api } from '../lib/api.ts';
+import { hasServer } from '../lib/env.ts';
 import { haptic } from '../lib/native.ts';
 import { sfx } from '../lib/sound.ts';
 import { useSettings } from '../stores/settings.ts';
@@ -161,7 +162,7 @@ function StreakPlay({ id }: { id: string }) {
       <p className="mt-1 font-semibold">{t('streak.answerWas', { name: regions.name(last.answerRegion) })}</p>
       {!last.correct && last.guessRegion && <p className="text-sm text-muted">{t('streak.youPicked', { name: regions.name(last.guessRegion) })}</p>}
       {!last.correct && last.timedOut && <p className="text-sm text-muted">{t('game.timeUp')}</p>}
-      <ReportButton target={{ panoId: last.pano.panoId }} className="mt-1" />
+      {hasServer && <ReportButton target={{ panoId: last.pano.panoId }} className="mt-1" />}
       {finished ? (
         <>
           <p className="mt-3 text-lg font-black text-accent-2">

@@ -64,7 +64,7 @@ async function request<T>(method: string, path: string, body?: unknown, retry = 
 
 export const serverNow = () => Date.now() + serverClockOffset;
 
-export const api = {
+const serverApi = {
   get: <T>(path: string) => request<T>('GET', path),
   post: <T>(path: string, body: unknown = {}) => request<T>('POST', path, body),
   patch: <T>(path: string, body: unknown) => request<T>('PATCH', path, body),
@@ -121,6 +121,66 @@ export const api = {
     return request<Leaderboard>('GET', `/leaderboards/${path}${q.size ? `?${q}` : ''}`);
   },
 };
+
+export type Api = typeof serverApi;
+
+/** Serverless build: the same API surface, backed by the in-browser engine. */
+const engine = () => import('./local/engine.ts');
+const offline = (what: string) => () => Promise.reject(new ApiError(501, 'offline', `${what} needs the online version`));
+
+const staticApi: Api = {
+  get: offline('This') as Api['get'],
+  post: offline('This') as Api['post'],
+  patch: offline('This') as Api['patch'],
+  del: offline('This') as Api['del'],
+
+  me: async () => (await engine()).me(),
+  updateMe: async (patch) => (await engine()).updateMe(patch),
+  officialMaps: async () => (await import('./local/maps.ts')).officialMaps(),
+  map: async (slug) => (await engine()).mapDetail(slug),
+  createGame: async (req) => (await engine()).createGame(req),
+  game: async (id) => (await engine()).getGame(id),
+  guess: async (id, req) => (await engine()).submitGuess(id, req),
+  nextRound: async (id) => (await engine()).nextRound(id),
+  replaceRound: async (id, roundNo) => (await engine()).replaceRound(id, roundNo),
+
+  user: async () => (await engine()).profilePage(),
+  createChallenge: async (mapSlug, settings) => (await engine()).createChallenge(mapSlug, settings),
+  challengeFromGame: async (gameId) => (await engine()).challengeFromGame(gameId),
+  challenge: async (code) => (await engine()).getChallenge(code),
+  playChallenge: async (code) => (await engine()).playChallenge(code),
+  challengeResults: async (code) => (await engine()).challengeResults(code),
+  daily: async () => (await engine()).daily(),
+  playDaily: async () => (await engine()).playDaily(),
+  dailyResults: async (day) => (await engine()).dailyResults(day),
+  createStreak: async (level, settings) => (await engine()).createStreak(level, settings),
+  streak: async (id) => (await engine()).getStreak(id),
+  streakGuess: async (id, body) => (await engine()).guessStreak(id, body),
+  streakNext: async (id) => (await engine()).nextStreakRound(id),
+  streakReplace: async (id) => (await engine()).replaceStreakRound(id),
+  explorer: async () => (await engine()).explorer(),
+  listMaps: async (params) => (await engine()).listMaps(params),
+  mapDetail: async (slug) => (await engine()).mapDetail(slug),
+  createMap: async (body) => (await engine()).createMap(body),
+  updateMap: async (id, body) => (await engine()).updateMap(id, body),
+  deleteMap: async (id) => (await engine()).deleteMap(id),
+  mapLocations: async (id) => (await engine()).mapLocations(id),
+  saveMapLocations: async (id, locations) => (await engine()).saveMapLocations(id, locations),
+  likeMap: async (id, like) => (await engine()).likeMap(id, like),
+  leaderboard: async (path) => (await engine()).leaderboard(path),
+
+  // Not available without a server.
+  report: offline('Reporting'),
+  adminReports: offline('The report queue'),
+  resolveReport: offline('The report queue'),
+  friends: offline('Friends'),
+  addFriend: offline('Friends'),
+  addFriendByCode: offline('Friends'),
+  removeFriend: offline('Friends'),
+  searchPlayers: offline('Player search'),
+};
+
+export const api: Api = env.staticMode ? staticApi : serverApi;
 
 export interface EditorLocation {
   panoId: string | null;

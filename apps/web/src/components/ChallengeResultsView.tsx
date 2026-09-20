@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { GameMap, type ResultLine } from '../game/GameMap.tsx';
 import { useSettings } from '../stores/settings.ts';
+import { hasServer } from '../lib/env.ts';
 import { LeaderboardList } from './LeaderboardList.tsx';
 
 const COLORS = ['#ff5a36', '#3b82f6', '#a855f7', '#eab308', '#ec4899', '#14b8a6', '#f97316', '#22c55e', '#64748b', '#ef4444'];
@@ -67,7 +68,8 @@ export function ChallengeResultsView({ results, bbox, meId }: { results: Challen
         )}
       </div>
       <div className="card p-3">
-        <h3 className="mb-2 px-2 font-black">{t('challenge.leaderboard')}</h3>
+        <h3 className="mb-2 px-2 font-black">{hasServer ? t('challenge.leaderboard') : t('leaderboard.personal')}</h3>
+        {!hasServer && <p className="mb-2 px-2 text-xs text-muted">{t('leaderboard.localOnly')}</p>}
         <LeaderboardList
           entries={results?.entries}
           me={results?.me}

@@ -1,7 +1,5 @@
-import type { ChallengeInfo, ChallengeResults, GameView, GuessResponse, LeaderboardEntry, ProfilePage } from '@tg/shared';
+import { dailySettingsFor, previousDay, taipeiDay, type ChallengeInfo, type ChallengeResults, type GameView, type GuessResponse, type LeaderboardEntry, type ProfilePage } from '@tg/shared';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { dailySettingsFor } from './services/challenges.ts';
-import { previousDay, taipeiDay } from './services/progression.ts';
 import { createTestEnv, type TestClient, type TestEnv } from './test-utils.ts';
 
 let env: TestEnv;

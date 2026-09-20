@@ -16,7 +16,44 @@ npm run play
 - 遊戲資料存在 `apps/server/.pglite`，重開也會保留。
 - 需要 `.env` 裡的 `VITE_GOOGLE_MAPS_API_KEY`（街景和地圖都靠它）。
 
-**讓同一個 Wi-Fi 的朋友一起玩**：伺服器監聽區域網路，其他人用 `http://<你的內網 IP>:8787` 就能連進來，也能一起開派對房間對戰。如果之後替金鑰設了網址限制，記得把這個來源也加進允許清單。要讓網路上的任何人都能玩，就需要部署到主機（見下方「部署」）。
+**讓同一個 Wi-Fi 的朋友一起玩**：伺服器監聽區域網路，其他人用 `http://<你的內網 IP>:8787` 就能連進來，也能一起開派對房間對戰。如果之後替金鑰設了網址限制，記得把這個來源也加進允許清單。要讓網路上的任何人都能玩，可以放上 GitHub Pages（見下一節）或部署完整版（見「部署」）。
+
+## 放到 GitHub Pages（免費、永遠在線）
+
+GitHub Pages 只能放靜態檔案，所以有一個**純前端版**：出題、計分、每日挑戰全部在瀏覽器裡跑，地點資料打包進網頁，紀錄存在瀏覽器的 localStorage。
+
+| 純前端版（Pages） | 完整版（需要伺服器） |
+|---|---|
+| ✅ 經典模式、每日挑戰、行政區／里連勝、行政區探索、挑戰連結、地圖編輯器 | 以上全部 |
+| ✅ XP、等級、成就（20 個可離線取得） | 26 個成就 |
+| ❌ 即時對戰、派對房間、排位 | ✅ |
+| ❌ 跨玩家排行榜、好友、跨裝置帳號 | ✅ |
+| 成績只留在自己的瀏覽器 | 存在資料庫 |
+| 答案打包在前端，看原始碼可作弊 | 答案留在伺服器 |
+
+部署步驟：
+
+```bash
+gh auth login                                     # 只需一次
+gh repo create taipei-guessr --public --source=. --remote=origin --push
+gh secret set VITE_GOOGLE_MAPS_API_KEY            # 貼上瀏覽器金鑰
+gh secret set VITE_GOOGLE_MAP_ID                  # 選填，Map ID
+```
+
+然後到 repo 的 **Settings → Pages**，把 Source 設成 **GitHub Actions**。之後每次 push 到 `main`，`.github/workflows/pages.yml` 就會自動建置並發佈到：
+
+```
+https://<你的帳號>.github.io/taipei-guessr/
+```
+
+⚠️ 金鑰會出現在公開的網頁程式碼裡，**務必**在 Google Cloud Console 把它限制成只有這個網址能用（見下方「Google Cloud 設定」）。
+
+本機預覽純前端版：
+
+```bash
+npm run build:static --workspace @tg/web
+npm run preview:static --workspace @tg/web    # http://localhost:4173
+```
 
 ## 功能
 

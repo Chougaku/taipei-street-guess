@@ -1,6 +1,7 @@
 export * from './geo.ts';
 export * from './rng.ts';
 export * from './scoring.ts';
+export * from './daily.ts';
 export * from './districts.ts';
 export * from './types.ts';
 export * from './progression.ts';

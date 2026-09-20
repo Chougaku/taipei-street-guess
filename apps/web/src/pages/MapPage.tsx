@@ -11,6 +11,7 @@ import { ErrorView, Spinner } from '../components/Status.tsx';
 import { toast } from '../components/Toast.tsx';
 import { mapName } from '../i18n/index.ts';
 import { api } from '../lib/api.ts';
+import { hasServer } from '../lib/env.ts';
 import { useSettings } from '../stores/settings.ts';
 
 export default function MapPage() {
@@ -101,7 +102,8 @@ export default function MapPage() {
 
       <div className="card p-4">
         <h2 className="mb-2 px-2 text-lg font-bold">
-          {t('mapPage.leaderboard')} <span className="text-sm font-normal text-muted">· {t('leaderboard.period.week')}</span>
+          {hasServer ? t('mapPage.leaderboard') : t('leaderboard.personal')}{' '}
+          {hasServer && <span className="text-sm font-normal text-muted">· {t('leaderboard.period.week')}</span>}
         </h2>
         <LeaderboardList entries={board?.entries.slice(0, 10)} me={board?.me} loading={boardLoading} />
       </div>

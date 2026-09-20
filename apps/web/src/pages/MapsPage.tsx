@@ -8,6 +8,7 @@ import { Spinner } from '../components/Status.tsx';
 import { toast } from '../components/Toast.tsx';
 import { mapName } from '../i18n/index.ts';
 import { api, ApiError } from '../lib/api.ts';
+import { hasServer } from '../lib/env.ts';
 import { MapCard } from './Home.tsx';
 
 type Tab = 'official' | 'community' | 'mine';
@@ -80,7 +81,7 @@ export default function MapsPage() {
         </button>
       </div>
       <div className="flex gap-1">
-        {(['official', 'community', 'mine'] as const).map((x) => (
+        {(['official', ...(hasServer ? (['community'] as const) : []), 'mine'] as const).map((x) => (
           <button key={x} className={`chip ${tab === x ? 'bg-accent text-white ring-accent' : 'text-muted'}`} onClick={() => setTab(x)}>
             {t(`maps.${x}`)}
           </button>

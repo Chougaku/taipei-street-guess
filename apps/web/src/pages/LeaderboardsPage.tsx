@@ -5,13 +5,14 @@ import { useTranslation } from 'react-i18next';
 import { LeaderboardList } from '../components/LeaderboardList.tsx';
 import { mapName } from '../i18n/index.ts';
 import { api } from '../lib/api.ts';
+import { hasServer } from '../lib/env.ts';
 
 type Tab = 'daily' | 'map' | 'xp' | 'streak' | 'rating';
 type Period = 'day' | 'week' | 'all';
 
 export default function LeaderboardsPage() {
   const { t } = useTranslation();
-  const [tab, setTab] = useState<Tab>('daily');
+  const [tab, setTab] = useState<Tab>(hasServer ? 'daily' : 'map');
   const [map, setMap] = useState('taipei');
   const [period, setPeriod] = useState<Period>('week');
   const [level, setLevel] = useState<'district' | 'village'>('district');
@@ -38,12 +39,12 @@ export default function LeaderboardsPage() {
     },
   });
 
-  const tabs: Tab[] = ['daily', 'map', 'xp', 'streak', 'rating'];
+  const tabs: Tab[] = hasServer ? ['daily', 'map', 'xp', 'streak', 'rating'] : ['map', 'streak', 'daily'];
   const showPeriod = tab === 'map' || tab === 'streak';
 
   return (
     <div className="mx-auto max-w-2xl space-y-4">
-      <h1 className="text-2xl font-black">{t('leaderboard.title')}</h1>
+      <h1 className="text-2xl font-black">{hasServer ? t('leaderboard.title') : t('leaderboard.personal')}</h1>
       <div className="flex gap-1 overflow-x-auto">
         {tabs.map((x) => (
           <button key={x} className={`chip shrink-0 ${tab === x ? 'bg-accent text-white ring-accent' : 'text-muted'}`} onClick={() => setTab(x)}>
@@ -75,7 +76,7 @@ export default function LeaderboardsPage() {
                 {t(`leaderboard.period.${p}`)}
               </button>
             ))}
-          {tab !== 'daily' && (
+          {hasServer && tab !== 'daily' && (
             <label className="ml-auto flex items-center gap-2 text-sm text-muted">
               <input type="checkbox" className="size-4 accent-[var(--color-accent)]" checked={friends} onChange={(e) => setFriends(e.target.checked)} />
               {t('leaderboard.friendsOnly')}

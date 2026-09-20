@@ -22,7 +22,7 @@ import { ScoreBar, ScorePill } from '../game/HudParts.tsx';
 import { PlayScreen } from '../game/PlayScreen.tsx';
 import { mapName } from '../i18n/index.ts';
 import { api } from '../lib/api.ts';
-import { shareUrl } from '../lib/env.ts';
+import { hasServer, shareUrl } from '../lib/env.ts';
 import { haptic, share } from '../lib/native.ts';
 import { sfx } from '../lib/sound.ts';
 import { useSettings } from '../stores/settings.ts';
@@ -167,9 +167,11 @@ function GamePage({ id }: { id: string }) {
           {t('game.district')}：{t(`district.${shownResult.districtCode}`)}
         </p>
       )}
-      <div className="mt-1 text-center">
-        <ReportButton target={{ gameId: game.id, roundNo: shownResult.roundNo }} />
-      </div>
+      {hasServer && (
+        <div className="mt-1 text-center">
+          <ReportButton target={{ gameId: game.id, roundNo: shownResult.roundNo }} />
+        </div>
+      )}
       <button className="btn-primary mt-4 w-full" onClick={onContinue} disabled={nextM.isPending}>
         {game.status === 'finished' ? t('game.viewSummary') : t('game.nextRound')}
       </button>

@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { Link, NavLink, Outlet } from 'react-router';
 import { api } from '../lib/api.ts';
+import { hasServer } from '../lib/env.ts';
 import { Avatar } from './Avatar.tsx';
 import { IconHome, IconMap, IconSettings, IconSwords, IconTrophy } from './icons.tsx';
 
@@ -20,13 +21,15 @@ export function Logo({ className = '' }: { className?: string }) {
   );
 }
 
-const NAV = [
+const ALL_NAV = [
   { to: '/', key: 'home', icon: IconHome, end: true },
   { to: '/multiplayer', key: 'multiplayer', icon: IconSwords },
   { to: '/maps', key: 'maps', icon: IconMap },
   { to: '/leaderboards', key: 'leaderboards', icon: IconTrophy },
   { to: '/settings', key: 'settings', icon: IconSettings },
 ] as const;
+
+const NAV = ALL_NAV.filter((n) => hasServer || n.to !== '/multiplayer');
 
 function ProfileChip() {
   const { data: me } = useMe();
@@ -73,7 +76,10 @@ export function Layout() {
       </main>
 
       {/* Mobile tab bar */}
-      <nav className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-5 border-t border-line/60 bg-ink/95 backdrop-blur md:hidden" style={{ paddingBottom: 'var(--sab)' }}>
+      <nav
+        className="fixed inset-x-0 bottom-0 z-40 grid border-t border-line/60 bg-ink/95 backdrop-blur md:hidden"
+        style={{ paddingBottom: 'var(--sab)', gridTemplateColumns: `repeat(${NAV.length}, minmax(0, 1fr))` }}
+      >
         {NAV.map((n) => (
           <NavLink
             key={n.to}

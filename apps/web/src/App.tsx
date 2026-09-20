@@ -8,7 +8,7 @@ import { ErrorView, FullScreenLoader } from './components/Status.tsx';
 import { InviteToaster } from './components/Realtime.tsx';
 import { Toaster } from './components/Toast.tsx';
 import { ApiError } from './lib/api.ts';
-import { env } from './lib/env.ts';
+import { env, hasServer } from './lib/env.ts';
 import { connectRealtime } from './lib/realtime.ts';
 import Home from './pages/Home.tsx';
 import { useSettings } from './stores/settings.ts';
@@ -50,40 +50,53 @@ function NotFound() {
   return <ErrorView error={new ApiError(404, 'not_found', 'Not found')} />;
 }
 
-const router = createBrowserRouter([
-  {
-    element: <Layout />,
-    errorElement: <ErrorView error={new Error('route')} />,
-    children: [
-      { path: '/', element: <Home /> },
-      { path: '/maps/:slug', element: page(<MapPage />) },
-      { path: '/settings', element: page(<SettingsPage />) },
-      { path: '/c/:code', element: page(<ChallengePage />) },
-      { path: '/daily', element: page(<DailyPage />) },
-      { path: '/u/:id', element: page(<ProfilePage />) },
+// Routes that need the backend are left out of the serverless (GitHub Pages) build.
+const onlineOnlyRoutes = hasServer
+  ? [
       { path: '/friends', element: page(<FriendsPage />) },
-      { path: '/leaderboards', element: page(<LeaderboardsPage />) },
       { path: '/auth/callback', element: page(<AuthCallback />) },
-      { path: '/streak', element: page(<StreakSetup />) },
-      { path: '/explorer', element: page(<ExplorerPage />) },
       { path: '/multiplayer', element: page(<MultiplayerPage />) },
-      { path: '/maps', element: page(<MapsPage />) },
       { path: '/admin', element: page(<AdminPage />) },
       { path: '/party/:code', element: page(<PartyPage />) },
-      { path: '*', element: <NotFound /> },
-    ],
-  },
-  // Full-screen game routes (no navigation chrome).
-  { path: '/game/:id', element: page(<GamePage />) },
-  { path: '/streak/:id', element: page(<StreakPage />) },
-  { path: '/match/:id', element: page(<MatchPage />) },
-  { path: '/editor/:id', element: page(<MapEditorPage />) },
-]);
+    ]
+  : [];
+
+const router = createBrowserRouter(
+  [
+    {
+      element: <Layout />,
+      errorElement: <ErrorView error={new Error('route')} />,
+      children: [
+        { path: '/', element: <Home /> },
+        { path: '/maps/:slug', element: page(<MapPage />) },
+        { path: '/settings', element: page(<SettingsPage />) },
+        { path: '/c/:code', element: page(<ChallengePage />) },
+        { path: '/daily', element: page(<DailyPage />) },
+        { path: '/u/:id', element: page(<ProfilePage />) },
+        { path: '/leaderboards', element: page(<LeaderboardsPage />) },
+        { path: '/streak', element: page(<StreakSetup />) },
+        { path: '/explorer', element: page(<ExplorerPage />) },
+        { path: '/maps', element: page(<MapsPage />) },
+        ...onlineOnlyRoutes,
+        { path: '*', element: <NotFound /> },
+      ],
+    },
+    // Full-screen game routes (no navigation chrome).
+    { path: '/game/:id', element: page(<GamePage />) },
+    { path: '/streak/:id', element: page(<StreakPage />) },
+    { path: '/editor/:id', element: page(<MapEditorPage />) },
+    ...(hasServer ? [{ path: '/match/:id', element: page(<MatchPage />) }] : []),
+  ],
+  // GitHub Pages serves the app from /<repo>/.
+  { basename: env.basePath.replace(/\/$/, '') || undefined },
+);
 
 export function App() {
   const { t } = useTranslation();
-  // Realtime connection for presence, invites and multiplayer.
-  useEffect(() => void connectRealtime(), []);
+  // Realtime connection for presence, invites and multiplayer (online build only).
+  useEffect(() => {
+    if (hasServer) void connectRealtime();
+  }, []);
   useEffect(() => {
     const onDeepLink = (e: Event) => void router.navigate((e as CustomEvent<string>).detail);
     window.addEventListener('tg:deeplink', onDeepLink);
@@ -95,7 +108,7 @@ export function App() {
       <APIProvider apiKey={env.googleMapsKey} language={mapsLanguage} region="TW">
         <RouterProvider router={router} />
         <Toaster />
-        <InviteToaster />
+        {hasServer && <InviteToaster />}
       </APIProvider>
     </QueryClientProvider>
   );

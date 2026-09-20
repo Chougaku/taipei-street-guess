@@ -206,6 +206,8 @@ export const zhTW = {
   },
   leaderboard: {
     title: '排行榜',
+    personal: '個人紀錄',
+    localOnly: '離線版只會記錄你自己在這個瀏覽器的成績',
     daily: '每日挑戰',
     map: '地圖',
     xp: '等級',

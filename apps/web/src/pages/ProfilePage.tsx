@@ -9,6 +9,8 @@ import { Modal } from '../components/Modal.tsx';
 import { ErrorView, Spinner } from '../components/Status.tsx';
 import { toast } from '../components/Toast.tsx';
 import { api, ApiError } from '../lib/api.ts';
+import { hasServer } from '../lib/env.ts';
+import { OFFLINE_ACHIEVEMENTS } from '../lib/local/achievements.ts';
 import { useSettings } from '../stores/settings.ts';
 
 const MEDAL_ICON: Record<string, string> = { bronze: '🥉', silver: '🥈', gold: '🥇', platinum: '💎' };
@@ -121,11 +123,16 @@ export default function ProfilePage() {
           <Stat label={t('profile.avgDistance')} value={stats.avgDistanceM === null ? '—' : formatDistance(stats.avgDistanceM, units)} />
           <Stat label={t('profile.dailyStreak')} value={`🔥 ${stats.dailyStreak}`} />
           <Stat label={t('profile.bestStreak')} value={stats.bestDistrictStreak} />
-          <Stat
-            label={t('profile.rating')}
-            value={profile.rankedGames > 0 ? `${profile.rating} · ${t(`division.${divisionForRating(profile.rating)}`)}` : '—'}
-          />
-          <Stat label={t('profile.duels')} value={`${stats.duelsWon} / ${stats.duelsPlayed}`} />
+          {hasServer && (
+            <>
+              <Stat
+                label={t('profile.rating')}
+                value={profile.rankedGames > 0 ? `${profile.rating} · ${t(`division.${divisionForRating(profile.rating)}`)}` : '—'}
+              />
+              <Stat label={t('profile.duels')} value={`${stats.duelsWon} / ${stats.duelsPlayed}`} />
+            </>
+          )}
+          <Stat label={t('profile.bestVillageStreak')} value={stats.bestVillageStreak} />
         </div>
       </section>
 
@@ -147,10 +154,13 @@ export default function ProfilePage() {
 
       <section className="card p-5">
         <h2 className="mb-3 font-black">
-          {t('profile.achievements')} <span className="text-sm text-muted">{unlocked.size} / {ACHIEVEMENTS.length}</span>
+          {t('profile.achievements')}{' '}
+          <span className="text-sm text-muted">
+            {unlocked.size} / {ACHIEVEMENTS.filter((a) => hasServer || OFFLINE_ACHIEVEMENTS.has(a.code)).length}
+          </span>
         </h2>
         <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
-          {ACHIEVEMENTS.map((a) => {
+          {ACHIEVEMENTS.filter((a) => hasServer || OFFLINE_ACHIEVEMENTS.has(a.code)).map((a) => {
             const at = unlocked.get(a.code);
             return (
               <div key={a.code} className={`flex items-center gap-3 rounded-xl p-3 ${at ? 'bg-panel-2' : 'bg-panel-2/40 opacity-50 grayscale'}`}>

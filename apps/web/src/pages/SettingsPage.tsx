@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { AccountSection } from '../components/AccountSection.tsx';
 import { useMe } from '../components/Layout.tsx';
+import { hasServer } from '../lib/env.ts';
 import { useSettings, type Language } from '../stores/settings.ts';
 
 function Row({ label, children }: { label: string; children: ReactNode }) {
@@ -80,14 +81,18 @@ export default function SettingsPage() {
         </Row>
       </div>
 
-      <h2 className="mb-3 mt-6 text-lg font-black">{t('account.title')}</h2>
-      <div className="card p-5">
-        <AccountSection />
-      </div>
+      {hasServer && <h2 className="mb-3 mt-6 text-lg font-black">{t('account.title')}</h2>}
+      {hasServer && (
+        <div className="card p-5">
+          <AccountSection />
+        </div>
+      )}
+      {hasServer && (
       <Link to="/friends" className="card mt-3 flex items-center justify-between p-5 font-semibold hover:ring-accent/60">
         {t('friends.title')} <span className="text-muted">›</span>
       </Link>
-      {me?.isAdmin && (
+      )}
+      {hasServer && me?.isAdmin && (
         <Link to="/admin" className="card mt-3 flex items-center justify-between p-5 font-semibold hover:ring-accent/60">
           {t('admin.title')} <span className="text-muted">›</span>
         </Link>

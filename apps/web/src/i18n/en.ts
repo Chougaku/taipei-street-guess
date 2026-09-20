@@ -209,6 +209,8 @@ export const en: Translations = {
   },
   leaderboard: {
     title: 'Leaderboards',
+    personal: 'Your records',
+    localOnly: 'The offline version only tracks your own scores in this browser',
     daily: 'Daily',
     map: 'Maps',
     xp: 'Level',

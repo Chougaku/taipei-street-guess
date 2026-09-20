@@ -1,5 +1,6 @@
 import {
   levelFromXp,
+  dailySettingsFor,
   randomCode,
   ROUNDS_PER_GAME,
   type ChallengeInfo,
@@ -164,20 +165,6 @@ async function playChallengeRow(db: Db, ch: ChallengeRow, userId: string): Promi
 
 export async function playChallenge(db: Db, code: string, userId: string): Promise<GameView> {
   return playChallengeRow(db, await loadChallenge(db, code), userId);
-}
-
-const DAILY_SETTINGS: GameSettings[] = [
-  { movement: 'moving', timeLimitSec: 180 }, // Sunday
-  { movement: 'moving', timeLimitSec: 120 },
-  { movement: 'nomove', timeLimitSec: 90 },
-  { movement: 'moving', timeLimitSec: 60 },
-  { movement: 'nmpz', timeLimitSec: 60 },
-  { movement: 'nomove', timeLimitSec: 60 },
-  { movement: 'moving', timeLimitSec: 90 }, // Saturday
-];
-
-export function dailySettingsFor(day: string): GameSettings {
-  return DAILY_SETTINGS[new Date(`${day}T00:00:00Z`).getUTCDay()]!;
 }
 
 async function dailyChallenge(db: Db, day: string): Promise<ChallengeRow> {

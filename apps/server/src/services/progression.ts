@@ -1,4 +1,4 @@
-import { medalForScore, medalRank, XP, type GameMode } from '@tg/shared';
+import { medalForScore, medalRank, previousDay, taipeiDay, XP, type GameMode } from '@tg/shared';
 import type { Db } from '../db.ts';
 import { checkGameAchievements } from './achievements.ts';
 import type { MapRow } from './maps.ts';
@@ -7,14 +7,7 @@ export async function addXp(db: Db, userId: string, xp: number) {
   if (xp > 0) await db.query('update public.profiles set xp = xp + $2 where id = $1', [userId, xp]);
 }
 
-/** Current calendar day in Taipei (UTC+8, no DST) as YYYY-MM-DD. */
-export function taipeiDay(now = Date.now()): string {
-  return new Date(now + 8 * 3600_000).toISOString().slice(0, 10);
-}
-
-export function previousDay(day: string): string {
-  return new Date(Date.parse(`${day}T00:00:00Z`) - 86_400_000).toISOString().slice(0, 10);
-}
+export { previousDay, taipeiDay };
 
 /** Awards XP, updates mode-specific progress and achievements for a finished game. */
 export async function onGameFinished(

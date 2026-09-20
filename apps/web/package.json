@@ -9,7 +9,9 @@
     "preview": "vite preview",
     "typecheck": "tsc -p tsconfig.json",
     "cap:sync": "vite build --mode native && cap sync android",
-    "android": "npm run cap:sync && cap open android"
+    "android": "npm run cap:sync && cap open android",
+    "build:static": "vite build --mode static",
+    "preview:static": "vite preview --port 4173"
   },
   "dependencies": {
     "@capacitor/android": "^8.5.2",

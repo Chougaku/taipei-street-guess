@@ -7,6 +7,7 @@ import { Link } from 'react-router';
 import { IconCalendar, IconCompass, IconEdit, IconFire, IconMap, IconSwords, IconUsers } from '../components/icons.tsx';
 import { mapName } from '../i18n/index.ts';
 import { api } from '../lib/api.ts';
+import { hasServer } from '../lib/env.ts';
 
 interface Mode {
   key: string;
@@ -17,7 +18,7 @@ interface Mode {
 }
 
 /** Modes are flipped to `ready` as their milestone lands. */
-export const MODES: Mode[] = [
+const ALL_MODES: Mode[] = [
   { key: 'classic', to: '/maps/taipei', icon: IconMap, color: 'from-accent to-accent-2', ready: true },
   { key: 'daily', to: '/daily', icon: IconCalendar, color: 'from-sky-500 to-indigo-500', ready: true },
   { key: 'streak', to: '/streak', icon: IconFire, color: 'from-rose-500 to-orange-400', ready: true },
@@ -26,6 +27,9 @@ export const MODES: Mode[] = [
   { key: 'battleRoyale', to: '/multiplayer', icon: IconUsers, color: 'from-amber-500 to-red-500', ready: true },
   { key: 'mapMaker', to: '/maps', icon: IconEdit, color: 'from-slate-500 to-slate-400', ready: true },
 ];
+
+/** Duels and Battle Royale need the realtime server. */
+export const MODES: Mode[] = ALL_MODES.filter((m) => hasServer || !('duels battleRoyale'.includes(m.key)));
 
 export function MapCard({ map }: { map: MapSummary }) {
   const { t } = useTranslation();
