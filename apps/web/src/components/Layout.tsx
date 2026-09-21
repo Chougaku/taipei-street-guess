@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { Link, NavLink, Outlet } from 'react-router';
 import { api } from '../lib/api.ts';
-import { hasServer } from '../lib/env.ts';
+import { env, hasServer } from '../lib/env.ts';
 import { Avatar } from './Avatar.tsx';
 import { IconHome, IconMap, IconSettings, IconSwords, IconTrophy } from './icons.tsx';
 
@@ -15,7 +15,7 @@ export function Logo({ className = '' }: { className?: string }) {
   const { t } = useTranslation();
   return (
     <Link to="/" className={`flex items-center gap-2 font-black tracking-tight ${className}`}>
-      <img src="/favicon.svg" alt="" className="size-8" />
+      <img src={`${env.basePath}favicon.svg`} alt="" className="size-8" />
       <span className="text-lg">{t('app.name')}</span>
     </Link>
   );

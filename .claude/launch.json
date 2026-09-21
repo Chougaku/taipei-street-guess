@@ -12,6 +12,12 @@
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev:web"],
       "port": 5173
+    },
+    {
+      "name": "web-static",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "preview:static", "--workspace", "@tg/web", "--", "--base", "/taipei-street-guess/"],
+      "port": 4173
     }
   ]
 }
