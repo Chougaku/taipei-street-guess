@@ -3,7 +3,9 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router';
 import { useMe } from '../components/Layout.tsx';
+import { NightMarketStall } from '../components/art/Street.tsx';
 import { Modal } from '../components/Modal.tsx';
+import { PageBanner } from '../components/PageBanner.tsx';
 import { Spinner } from '../components/Status.tsx';
 import { toast } from '../components/Toast.tsx';
 import { mapName } from '../i18n/index.ts';
@@ -74,12 +76,11 @@ export default function MapsPage() {
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-wrap items-center gap-2">
-        <h1 className="mr-auto text-2xl font-black">{t('maps.title')}</h1>
-        <button className="btn-primary" onClick={() => setCreating(true)}>
+      <PageBanner title={t('maps.title')} tint="from-pink-500/30" art={<NightMarketStall className="w-full" />}>
+        <button className="btn-primary mt-4" onClick={() => setCreating(true)}>
           + {t('maps.create')}
         </button>
-      </div>
+      </PageBanner>
       <div className="flex gap-1">
         {(['official', ...(hasServer ? (['community'] as const) : []), 'mine'] as const).map((x) => (
           <button key={x} className={`chip ${tab === x ? 'bg-accent text-white ring-accent' : 'text-muted'}`} onClick={() => setTab(x)}>

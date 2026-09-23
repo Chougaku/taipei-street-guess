@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate, useParams } from 'react-router';
 import type { ChallengeInfo } from '@tg/shared';
+import { DistrictGlyph, glyphColor, mapTheme } from '../components/art/DistrictGlyph.tsx';
 import { ChallengeShare } from '../components/ChallengeShare.tsx';
 import { GameSettingsForm } from '../components/GameSettingsForm.tsx';
 import { LeaderboardList } from '../components/LeaderboardList.tsx';
@@ -58,12 +59,21 @@ export default function MapPage() {
       </div>
     );
 
+  const theme = mapTheme(map);
   return (
     <div className="mx-auto max-w-2xl space-y-4">
-      <div className="card p-6">
+      <div className="card relative overflow-hidden p-6" style={{ backgroundImage: `linear-gradient(120deg, ${theme.color}33, transparent 60%)` }}>
+        {theme.glyph && (
+          <span
+            className="absolute right-5 top-5 grid size-16 place-items-center rounded-2xl sm:size-20"
+            style={{ background: `${theme.color}26`, color: glyphColor(theme.color) }}
+          >
+            <DistrictGlyph code={theme.glyph} className="size-11 sm:size-14" />
+          </span>
+        )}
         <p className="text-sm text-muted">{map.kind === 'official' ? t('home.officialMaps') : map.ownerName}</p>
-        <h1 className="text-3xl font-black">{mapName(map)}</h1>
-        <p className="mt-1 text-muted">{map.description}</p>
+        <h1 className={`text-3xl font-black ${theme.glyph ? 'pr-20 sm:pr-24' : ''}`}>{mapName(map)}</h1>
+        <p className={`mt-1 text-muted ${theme.glyph ? 'pr-20 sm:pr-24' : ''}`}>{map.description}</p>
         <div className="mt-3 flex flex-wrap gap-2 text-xs text-muted">
           <span className="chip">{t('home.locations', { count: map.locationCount.toLocaleString() as never })}</span>
           <span className="chip">{t('mapPage.mapSize', { km: map.diagonalKm.toFixed(1) })}</span>

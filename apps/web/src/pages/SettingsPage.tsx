@@ -2,6 +2,8 @@ import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { AccountSection } from '../components/AccountSection.tsx';
+import { MrtTrain } from '../components/art/Street.tsx';
+import { PageBanner } from '../components/PageBanner.tsx';
 import { useMe } from '../components/Layout.tsx';
 import { hasServer } from '../lib/env.ts';
 import { useSettings, type Language } from '../stores/settings.ts';
@@ -35,7 +37,9 @@ export default function SettingsPage() {
   const { data: me } = useMe();
   return (
     <div className="mx-auto max-w-xl">
-      <h1 className="mb-4 text-2xl font-black">{t('settings.title')}</h1>
+      <div className="mb-4">
+        <PageBanner title={t('settings.title')} tint="from-sky-500/30" art={<MrtTrain viewBox="128 4 132 50" className="w-full" />} />
+      </div>
       <div className="card divide-y divide-line px-5">
         <Row label={t('settings.language')}>
           <select

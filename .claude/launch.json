@@ -14,6 +14,12 @@
       "port": 5173
     },
     {
+      "name": "web-static-dev",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "--workspace", "@tg/web", "--", "--mode", "static", "--port", "5173", "--strictPort"],
+      "port": 5173
+    },
+    {
       "name": "web-static",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "preview:static", "--workspace", "@tg/web", "--", "--base", "/taipei-street-guess/"],

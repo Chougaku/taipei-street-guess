@@ -2,6 +2,7 @@ import type { ChallengeInfo, GameView } from '@tg/shared';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router';
+import { Lantern } from '../components/art/Stickers.tsx';
 import { Avatar } from '../components/Avatar.tsx';
 import { ChallengeResultsView } from '../components/ChallengeResultsView.tsx';
 import { formatTimeLimit } from '../components/GameSettingsForm.tsx';
@@ -16,20 +17,28 @@ export function ChallengeCard({
   title,
   onPlay,
   playing,
+  art = (
+    <span className="block origin-top animate-swing">
+      <Lantern className="h-24 sm:h-32" />
+    </span>
+  ),
   children,
 }: {
   info: ChallengeInfo;
   title: string;
   onPlay(): void;
   playing: boolean;
+  /** Illustration on the right; a 猜 lantern (as in lantern riddles) by default. */
+  art?: React.ReactNode;
   children?: React.ReactNode;
 }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   return (
-    <div className="card relative overflow-hidden p-6">
+    <div className="card relative overflow-hidden bg-gradient-to-br from-accent/25 via-panel to-panel p-6">
       <div className="absolute -right-10 -top-10 size-40 rounded-full bg-accent/20 blur-2xl" />
-      <div className="relative">
+      <div className="pointer-events-none absolute right-4 top-4 sm:right-10 sm:top-6">{art}</div>
+      <div className="relative pr-20 sm:pr-36">
         {info.creator && (
           <div className="mb-3 flex items-center gap-2">
             <Avatar id={info.creator.avatar} size={28} />

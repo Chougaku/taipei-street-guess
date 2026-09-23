@@ -4,7 +4,9 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router';
+import { Baseball } from '../components/art/Stickers.tsx';
 import { GameSettingsForm } from '../components/GameSettingsForm.tsx';
+import { PageBanner } from '../components/PageBanner.tsx';
 import { ReportButton } from '../components/ReportModal.tsx';
 import { IconClose } from '../components/icons.tsx';
 import { ErrorView, FullScreenLoader, Spinner } from '../components/Status.tsx';
@@ -38,10 +40,17 @@ export function StreakSetup() {
   });
   return (
     <div className="mx-auto max-w-2xl space-y-4">
-      <div className="card p-6">
-        <h1 className="text-3xl font-black">🔥 {t('streak.title')}</h1>
+      <PageBanner
+        title={t('streak.title')}
+        tint="from-rose-500/30"
+        art={
+          <span className="animate-bob">
+            <Baseball className="size-20 sm:size-24" />
+          </span>
+        }
+      >
         <p className="mt-2 text-muted">{t('streak.desc')}</p>
-      </div>
+      </PageBanner>
       <div className="card space-y-5 p-6">
         <fieldset>
           <legend className="mb-2 text-sm font-semibold text-muted">{t('streak.level')}</legend>

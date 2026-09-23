@@ -2,6 +2,7 @@ import type { LeaderboardEntry } from '@tg/shared';
 import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
+import { Baseball } from './art/Stickers.tsx';
 import { Avatar } from './Avatar.tsx';
 import { Spinner } from './Status.tsx';
 
@@ -29,7 +30,13 @@ export function LeaderboardList({
         <Spinner />
       </div>
     );
-  if (entries.length === 0) return <p className="py-10 text-center text-muted">{t('leaderboard.empty')}</p>;
+  if (entries.length === 0)
+    return (
+      <div className="flex flex-col items-center gap-3 py-10 text-center text-muted">
+        <Baseball className="size-14 animate-bob" />
+        <p>{t('leaderboard.empty')}</p>
+      </div>
+    );
 
   const row = (e: LeaderboardEntry, highlight = false) => {
     const content = (

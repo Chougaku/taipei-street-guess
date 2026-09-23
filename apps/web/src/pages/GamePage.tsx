@@ -14,6 +14,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router';
 import { ChallengeShare } from '../components/ChallengeShare.tsx';
 import { ReportButton } from '../components/ReportModal.tsx';
+import { ScoreTitle } from '../components/ScoreTitle.tsx';
 import { IconClose, IconShare } from '../components/icons.tsx';
 import { ErrorView, FullScreenLoader } from '../components/Status.tsx';
 import { toast } from '../components/Toast.tsx';
@@ -190,6 +191,7 @@ function GamePage({ id }: { id: string }) {
       </div>
       <ScoreBar score={game.totalScore} max={MAX_GAME_SCORE} />
       {game.xpGained ? <p className="mt-2 text-right text-sm font-bold text-teal">{t('game.xpGained', { xp: game.xpGained })}</p> : null}
+      <ScoreTitle score={game.totalScore} />
       <ol className="mt-3 divide-y divide-line text-sm">
         {game.rounds.map((r) => (
           <li key={r.roundNo} className="flex items-center justify-between gap-2 py-2">

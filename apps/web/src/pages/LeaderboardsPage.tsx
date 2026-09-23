@@ -2,7 +2,9 @@ import { divisionForRating } from '@tg/shared';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { TaipeiDome } from '../components/art/Landmarks.tsx';
 import { LeaderboardList } from '../components/LeaderboardList.tsx';
+import { PageBanner } from '../components/PageBanner.tsx';
 import { mapName } from '../i18n/index.ts';
 import { api } from '../lib/api.ts';
 import { hasServer } from '../lib/env.ts';
@@ -44,7 +46,11 @@ export default function LeaderboardsPage() {
 
   return (
     <div className="mx-auto max-w-2xl space-y-4">
-      <h1 className="text-2xl font-black">{hasServer ? t('leaderboard.title') : t('leaderboard.personal')}</h1>
+      <PageBanner
+        title={hasServer ? t('leaderboard.title') : t('leaderboard.personal')}
+        tint="from-amber-500/30"
+        art={<TaipeiDome className="w-full" />}
+      />
       <div className="flex gap-1 overflow-x-auto">
         {tabs.map((x) => (
           <button key={x} className={`chip shrink-0 ${tab === x ? 'bg-accent text-white ring-accent' : 'text-muted'}`} onClick={() => setTab(x)}>

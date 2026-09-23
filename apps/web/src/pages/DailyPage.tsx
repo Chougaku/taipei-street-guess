@@ -2,6 +2,7 @@ import type { GameView } from '@tg/shared';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
+import { BubbleTea } from '../components/art/Stickers.tsx';
 import { ChallengeResultsView } from '../components/ChallengeResultsView.tsx';
 import { useMe } from '../components/Layout.tsx';
 import { ErrorView, Spinner } from '../components/Status.tsx';
@@ -48,7 +49,17 @@ export default function DailyPage() {
 
   return (
     <div className="space-y-4">
-      <ChallengeCard info={info} title={`${t('daily.title')} · ${info.day}`} onPlay={() => play.mutate()} playing={play.isPending}>
+      <ChallengeCard
+        info={info}
+        title={`${t('daily.title')} · ${info.day}`}
+        onPlay={() => play.mutate()}
+        playing={play.isPending}
+        art={
+          <span className="block animate-bob">
+            <BubbleTea className="h-24 sm:h-32" />
+          </span>
+        }
+      >
         <p className="mt-3 text-sm text-muted">{t('daily.desc')}</p>
         <div className="mt-3 flex flex-wrap gap-3 text-sm">
           {page && page.stats.dailyStreak > 0 && <span className="font-bold text-accent-2">🔥 {t('daily.streak', { count: page.stats.dailyStreak })}</span>}

@@ -2,6 +2,7 @@ import type { BBox, LatLng, MovementMode, PanoView } from '@tg/shared';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { IconClose, IconExpand, IconFlag, IconMap, IconMinus, IconPin, IconPlus, IconShrink, IconUndo } from '../components/icons.tsx';
+import { Spinner } from '../components/Status.tsx';
 import { useHotkeys, useIsCompact } from '../lib/hooks.ts';
 import { haptic, keepScreenAwake } from '../lib/native.ts';
 import { sfx } from '../lib/sound.ts';
@@ -142,7 +143,7 @@ export function PlayScreen(props: PlayScreenProps) {
       {!loaded && (
         <div className="absolute inset-0 z-[2] grid place-items-center bg-ink/80">
           <div className="flex flex-col items-center gap-3 text-muted">
-            <div className="size-10 animate-spin rounded-full border-4 border-line border-t-accent" />
+            <Spinner className="size-10" />
             {t('game.loadingPano')}
           </div>
         </div>

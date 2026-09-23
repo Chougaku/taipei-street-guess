@@ -3,6 +3,9 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
+import { DistrictGlyph, glyphColor } from '../components/art/DistrictGlyph.tsx';
+import { Scooter } from '../components/art/Street.tsx';
+import { PageBanner } from '../components/PageBanner.tsx';
 import { Spinner } from '../components/Status.tsx';
 import { toast } from '../components/Toast.tsx';
 import { GameMap } from '../game/GameMap.tsx';
@@ -44,8 +47,15 @@ export default function ExplorerPage() {
 
   return (
     <div className="space-y-4">
-      <div className="card p-6">
-        <h1 className="text-3xl font-black">🧭 {t('explorer.title')}</h1>
+      <PageBanner
+        title={t('explorer.title')}
+        tint="from-emerald-500/30"
+        art={
+          <span className="animate-bob">
+            <Scooter className="w-20 sm:w-32" />
+          </span>
+        }
+      >
         <p className="mt-2 text-muted">{t('explorer.desc')}</p>
         <div className="mt-3 flex flex-wrap gap-2 text-xs">
           <span className="chip text-muted">{t('explorer.thresholds')}</span>
@@ -56,7 +66,7 @@ export default function ExplorerPage() {
           ))}
         </div>
         <p className="mt-3 font-bold text-accent-2">{t('explorer.progress', { count: collected })}</p>
-      </div>
+      </PageBanner>
 
       <div className="grid gap-4 lg:grid-cols-[1fr_1fr]">
         <div className="card relative h-[420px] overflow-hidden">
@@ -77,7 +87,10 @@ export default function ExplorerPage() {
               >
                 <div className="absolute inset-x-0 top-0 h-1" style={{ background: d.color }} />
                 <div className="flex items-center justify-between">
-                  <span className="font-black">{t(`district.${d.code}`)}</span>
+                  <span className="flex items-center gap-1.5 font-display font-black">
+                    <DistrictGlyph code={d.code} className="size-6 shrink-0" style={{ color: glyphColor(d.color) }} />
+                    {t(`district.${d.code}`)}
+                  </span>
                   <span className="text-2xl">{medal ? MEDAL_ICON[medal] : '▫️'}</span>
                 </div>
                 <p className="mt-1 text-xs text-muted">
