@@ -1,4 +1,4 @@
-# 台北街景猜猜 TaipeiGuesser
+# 台北街景猜猜 TaipeiGuessr
 
 臺北市版的街景猜謎遊戲。看 Google 街景，在地圖上猜出你在臺北的哪裡，功能對標 GeoGuessr。主要在 Chrome 等桌面瀏覽器遊玩，手機瀏覽器也能玩（另外附有 Android App 和 iOS PWA，非必要）。
 
